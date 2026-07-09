@@ -1,4 +1,4 @@
-﻿# retail-audit-kit - корпоративный аудит розницы
+# retail-audit-kit - корпоративный аудит розницы
 
 GitHub: `git@github.com:PavelKobe/retail-audit-kit.git`
 

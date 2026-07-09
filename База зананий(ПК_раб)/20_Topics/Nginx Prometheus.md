@@ -1,4 +1,4 @@
-﻿# Nginx Prometheus
+# Nginx Prometheus
 
 Тема финальной production-сборки и наблюдаемости.
 

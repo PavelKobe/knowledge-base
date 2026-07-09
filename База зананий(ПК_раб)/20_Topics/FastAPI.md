@@ -1,4 +1,4 @@
-﻿# FastAPI
+# FastAPI
 
 FastAPI - web-фреймворк для создания API на Python.
 
