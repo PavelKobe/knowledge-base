@@ -1,0 +1,235 @@
+{
+  "main": {
+    "id": "9395d46ec68b0e36",
+    "type": "split",
+    "children": [
+      {
+        "id": "3730821d488547e7",
+        "type": "tabs",
+        "dimension": 43.210659898477154,
+        "children": [
+          {
+            "id": "f45c015b26f863d5",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Добро пожаловать.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Добро пожаловать"
+            }
+          }
+        ]
+      },
+      {
+        "id": "baedbb6f5a460b86",
+        "type": "tabs",
+        "dimension": 56.789340101522846,
+        "children": [
+          {
+            "id": "79c41968b38496c3",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Граф"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "3fa0e955b14cbbcc",
+    "type": "split",
+    "children": [
+      {
+        "id": "3fa66c4e39a93a68",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "557258ad1962cfa9",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Файловый менеджер"
+            }
+          },
+          {
+            "id": "ab97a038b8667b13",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Поиск"
+            }
+          },
+          {
+            "id": "4e59656c532d40db",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Закладки"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "88ab31b6cf0610d7",
+    "type": "split",
+    "children": [
+      {
+        "id": "acc1ab59f1bd1a46",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "10a808db46127e9e",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Обратные ссылки"
+            }
+          },
+          {
+            "id": "00325e6007c1394a",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Исходящие ссылки"
+            }
+          },
+          {
+            "id": "d29c73c5d3289686",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Теги"
+            }
+          },
+          {
+            "id": "51017832a08a2055",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "Все свойства"
+            }
+          },
+          {
+            "id": "b823634f373dac06",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Структура"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Меню быстрого перехода": false,
+      "graph:Граф": false,
+      "canvas:Создать новый холст": false,
+      "daily-notes:Сегодняшняя заметка": false,
+      "templates:Вставить шаблон": false,
+      "command-palette:Открыть палитру команд": false,
+      "bases:Создать новую базу": false
+    }
+  },
+  "active": "79c41968b38496c3",
+  "lastOpenFiles": [
+    "Главная.md",
+    "20_Topics/Windows Server deployment.md",
+    "20_Topics/Корпоративное хранилище фото.md",
+    "20_Topics/KPI отчеты.md",
+    "20_Topics/Excel и PDF отчеты.md",
+    "20_Topics/Checklist Templates.md",
+    "20_Topics/asyncpg.md",
+    "20_Topics/HTTP Basic Auth.md",
+    "20_Topics/Vite.md",
+    "20_Topics/React.md",
+    "30_Snippets/Деплой retail-audit-kit на Windows Server.md",
+    "30_Snippets/Команды retail-audit-kit.md",
+    "10_Projects/retail-audit-kit - данные и API.md",
+    "10_Projects/retail-audit-kit - архитектура.md",
+    "10_Projects/retail-audit-kit - корпоративный аудит розницы.md",
+    "30_Snippets/Диагностика PostgreSQL и health-db.md",
+    "20_Topics/Docker Compose.md",
+    "20_Topics/PostgreSQL.md",
+    "20_Topics/RabbitMQ.md",
+    "10_Projects/shop-backend-course - учебный backend-стек.md",
+    "Добро пожаловать.md",
+    "40_Daily/2026-07-09.md",
+    "90_Templates/Шаблон заметки по модулю backend.md",
+    "30_Snippets/Команды shop-backend-course.md",
+    "20_Topics/Nginx Prometheus.md",
+    "20_Topics/Ruff Mypy pre-commit.md",
+    "90_Templates",
+    "40_Daily",
+    "30_Snippets",
+    "20_Topics",
+    "10_Projects"
+  ]
+}
