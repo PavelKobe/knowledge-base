@@ -1,0 +1,214 @@
+{
+  "main": {
+    "id": "d276c9bb5f8e96a7",
+    "type": "split",
+    "children": [
+      {
+        "id": "79750cf1feda5f65",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "6d1b2347f2aea1c6",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "База зананий(ПК_раб)/20_Topics/FastAPI.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "FastAPI"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "f7387d4505cc692b",
+    "type": "split",
+    "children": [
+      {
+        "id": "188cc4d13e58bde6",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "71ffc77d2057bd3b",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Файловый менеджер"
+            }
+          },
+          {
+            "id": "c2c6fd2cedd833c4",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Поиск"
+            }
+          },
+          {
+            "id": "424007ed731e6d80",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Закладки"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "5dae3ba983e345f0",
+    "type": "split",
+    "children": [
+      {
+        "id": "c72ae5f24306174a",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e6363fab19c9fc29",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "База зананий(ПК_раб)/10_Projects/retail-audit-kit - корпоративный аудит розницы.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Обратные ссылки для retail-audit-kit - корпоративный аудит розницы"
+            }
+          },
+          {
+            "id": "4cc7634e72508ff9",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "База зананий(ПК_раб)/10_Projects/retail-audit-kit - корпоративный аудит розницы.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Исходящие ссылки из retail-audit-kit - корпоративный аудит розницы"
+            }
+          },
+          {
+            "id": "d79a7a3db134b55e",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Теги"
+            }
+          },
+          {
+            "id": "82a3dc4953083872",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "Все свойства"
+            }
+          },
+          {
+            "id": "4f4fbf85d050f228",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "База зананий(ПК_раб)/10_Projects/retail-audit-kit - корпоративный аудит розницы.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Структура retail-audit-kit - корпоративный аудит розницы"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Меню быстрого перехода": false,
+      "graph:Граф": false,
+      "canvas:Создать новый холст": false,
+      "daily-notes:Сегодняшняя заметка": false,
+      "templates:Вставить шаблон": false,
+      "command-palette:Открыть палитру команд": false,
+      "bases:Создать новую базу": false
+    }
+  },
+  "active": "6d1b2347f2aea1c6",
+  "lastOpenFiles": [
+    "База зананий(ПК_раб)/30_Snippets/Эксплуатация NutryAI.md",
+    "База зананий(ПК_раб)/Главная.md",
+    "База зананий(ПК_раб)/10_Projects/NutryAI - ИИ-дневник питания.md",
+    "База зананий(ПК_раб)/20_Topics/AIHub.md",
+    "База зананий(ПК_раб)/20_Topics/PWA.md",
+    "База зананий(ПК_раб)/20_Topics/Barcode Scanner.md",
+    "База зананий(ПК_раб)/10_Projects/NutryAI - данные и API.md",
+    "База зананий(ПК_раб)/10_Projects/NutryAI - архитектура.md",
+    "База зананий(ПК_раб)/30_Snippets/Команды NutryAI.md",
+    "База зананий(ПК_раб)/20_Topics/Next.js App Router.md",
+    "База зананий(ПК_раб)/10_Projects/retail-audit-kit - корпоративный аудит розницы.md",
+    "База зананий(ПК_раб)/30_Snippets/Эксплуатация Antygraviti MVP.md",
+    "База зананий(ПК_раб)/10_Projects/Antygraviti MVP - данные и API.md",
+    "База зананий(ПК_раб)/20_Topics/sing-box.md",
+    "База зананий(ПК_раб)/20_Topics/Yandex Database YDB.md",
+    "База зананий(ПК_раб)/20_Topics/YooKassa.md",
+    "База зананий(ПК_раб)/30_Snippets/Команды Antygraviti MVP.md",
+    "База зананий(ПК_раб)/20_Topics/Aeza VPS.md",
+    "База зананий(ПК_раб)/20_Topics/Yandex Cloud Serverless.md",
+    "База зананий(ПК_раб)/10_Projects/Antygraviti MVP - Gatekeeper VPN Orchestrator.md",
+    "База зананий(ПК_раб)/20_Topics/Hiddify.md",
+    "База зананий(ПК_раб)/10_Projects/Antygraviti MVP - архитектура.md",
+    "База зананий(ПК_раб)/20_Topics/VLESS Reality.md",
+    "База зананий(ПК_раб)/20_Topics/Cloudflare CDN.md",
+    "База зананий(ПК_раб)/20_Topics/FastAPI.md"
+  ]
+}
