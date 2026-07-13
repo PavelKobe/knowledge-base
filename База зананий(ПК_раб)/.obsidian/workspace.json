@@ -11,10 +11,14 @@
             "id": "79c41968b38496c3",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Граф"
+              "type": "markdown",
+              "state": {
+                "file": "Главная.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Главная"
             }
           }
         ]
@@ -90,6 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "Главная.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -99,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Обратные ссылки"
+              "title": "Обратные ссылки для Главная"
             }
           },
           {
@@ -108,11 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "Главная.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Исходящие ссылки"
+              "title": "Исходящие ссылки из Главная"
             }
           },
           {
@@ -150,12 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "Главная.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Структура"
+              "title": "Структура Главная"
             }
           }
         ]
@@ -178,12 +185,19 @@
   },
   "active": "79c41968b38496c3",
   "lastOpenFiles": [
-    "90_Templates/Шаблон заметки по модулю backend.md",
-    "Без названия.canvas",
-    "10_Projects/retail-audit-kit - корпоративный аудит розницы.md",
-    "Главная.md",
-    "20_Topics/Корпоративное хранилище фото.md",
+    "20_Topics/JWT.md",
+    "20_Topics/PostgreSQL.md",
     "20_Topics/FastAPI.md",
+    "Главная.md",
+    "90_Templates/Универсальный чек-лист среды проекта с AI-агентом.md",
+    "90_Templates/test_unicode_tmp.md",
+    "Без названия 1",
+    "Без названия",
+    "30_Snippets/Деплой retail-audit-kit на Windows Server.md",
+    "10_Projects/retail-audit-kit - корпоративный аудит розницы.md",
+    "Без названия.canvas",
+    "90_Templates/Шаблон заметки по модулю backend.md",
+    "20_Topics/Корпоративное хранилище фото.md",
     "20_Topics/Session Cookie Auth.md",
     "20_Topics/Telegram Bot.md",
     "20_Topics/OpenRouter.md",
@@ -200,11 +214,6 @@
     "20_Topics/Alembic.md",
     "Инструкция.md",
     "KPI РѕС‚С‡РµС‚С‹.md",
-    "Добро пожаловать.md",
-    "20_Topics/Windows Server deployment.md",
-    "20_Topics/KPI отчеты.md",
-    "20_Topics/Excel и PDF отчеты.md",
-    "20_Topics/Checklist Templates.md",
     "90_Templates",
     "40_Daily",
     "30_Snippets",

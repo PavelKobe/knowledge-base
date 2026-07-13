@@ -1,4 +1,4 @@
-﻿# Деплой retail-audit-kit на Windows Server
+# Деплой retail-audit-kit на Windows Server
 
 Связанный проект: [[retail-audit-kit - корпоративный аудит розницы]].
 
