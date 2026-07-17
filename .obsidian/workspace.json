@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "База зананий(ПК_раб)/20_Topics/FastAPI.md",
+                "file": "База зананий(ПК_раб)/Главная.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "FastAPI"
+              "title": "Главная"
             }
           }
         ]
@@ -185,8 +185,12 @@
   },
   "active": "6d1b2347f2aea1c6",
   "lastOpenFiles": [
-    "База зананий(ПК_раб)/30_Snippets/Эксплуатация NutryAI.md",
     "База зананий(ПК_раб)/Главная.md",
+    "База зананий(ПК_раб)/90_Templates/Универсальный чек-лист среды проекта с AI-агентом.md",
+    "База зананий(ПК_раб)/20_Topics/PostgreSQL.md",
+    "База зананий(ПК_раб)/90_Templates/Шаблон заметки по модулю backend.md",
+    "База зананий(ПК_раб)/20_Topics/FastAPI.md",
+    "База зананий(ПК_раб)/30_Snippets/Эксплуатация NutryAI.md",
     "База зананий(ПК_раб)/10_Projects/NutryAI - ИИ-дневник питания.md",
     "База зананий(ПК_раб)/20_Topics/AIHub.md",
     "База зананий(ПК_раб)/20_Topics/PWA.md",
@@ -206,9 +210,6 @@
     "База зананий(ПК_раб)/20_Topics/Yandex Cloud Serverless.md",
     "База зананий(ПК_раб)/10_Projects/Antygraviti MVP - Gatekeeper VPN Orchestrator.md",
     "База зананий(ПК_раб)/20_Topics/Hiddify.md",
-    "База зананий(ПК_раб)/10_Projects/Antygraviti MVP - архитектура.md",
-    "База зананий(ПК_раб)/20_Topics/VLESS Reality.md",
-    "База зананий(ПК_раб)/20_Topics/Cloudflare CDN.md",
-    "База зананий(ПК_раб)/20_Topics/FastAPI.md"
+    "База зананий(ПК_раб)/10_Projects/Antygraviti MVP - архитектура.md"
   ]
 }
