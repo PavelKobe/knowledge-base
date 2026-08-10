@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Главная.md",
+                "file": "90_Templates/Универсальный чек-лист среды проекта с AI-агентом.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Главная"
+              "title": "Универсальный чек-лист среды проекта с AI-агентом"
             }
           }
         ]
@@ -185,16 +185,18 @@
   },
   "active": "79c41968b38496c3",
   "lastOpenFiles": [
+    "Главная.md",
+    "20_Topics/REST API.md",
+    "10_Projects/retail-audit-kit - корпоративный аудит розницы.md",
+    "10_Projects/Antygraviti MVP - архитектура.md",
     "20_Topics/JWT.md",
     "20_Topics/PostgreSQL.md",
     "20_Topics/FastAPI.md",
-    "Главная.md",
     "90_Templates/Универсальный чек-лист среды проекта с AI-агентом.md",
     "90_Templates/test_unicode_tmp.md",
     "Без названия 1",
     "Без названия",
     "30_Snippets/Деплой retail-audit-kit на Windows Server.md",
-    "10_Projects/retail-audit-kit - корпоративный аудит розницы.md",
     "Без названия.canvas",
     "90_Templates/Шаблон заметки по модулю backend.md",
     "20_Topics/Корпоративное хранилище фото.md",
@@ -212,8 +214,6 @@
     "10_Projects/VoiceScreen - голосовой AI-скрининг.md",
     "20_Topics/Nginx Prometheus.md",
     "20_Topics/Alembic.md",
-    "Инструкция.md",
-    "KPI РѕС‚С‡РµС‚С‹.md",
     "90_Templates",
     "40_Daily",
     "30_Snippets",
