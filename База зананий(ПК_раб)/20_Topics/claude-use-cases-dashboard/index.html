@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>12 сценариев Claude</title>
+  <style>
+    :root{--ink:#1f2428;--muted:#697176;--paper:#f7f4ed;--panel:#fffdfa;--line:#cbc3b6;--orange:#df6232;--orange-soft:#f6ded2;--green:#258b72;--blue:#4775b7;--purple:#775ca1;--gold:#c68a32;--red:#b94e5b}
+    *{box-sizing:border-box}body{margin:0;background:#e8e4dc;color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}.sheet{width:min(1200px,calc(100% - 28px));margin:14px auto;padding:28px;background:var(--paper);border:1px solid #d6cec1;box-shadow:0 14px 45px rgba(40,34,24,.12)}
+    .top{display:flex;justify-content:space-between;gap:12px;font:700 11px/1.3 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}.top .mark{color:var(--orange)}
+    h1{max-width:960px;margin:27px auto 11px;text-align:center;font:900 clamp(44px,7.2vw,82px)/.92 Impact,Haettenschweiler,"Arial Narrow Bold",sans-serif;letter-spacing:.01em;text-transform:uppercase}.orange{color:var(--orange)}.lead{max-width:800px;margin:0 auto 24px;text-align:center;color:var(--muted);font-size:17px;line-height:1.55}
+    .summary{display:grid;grid-template-columns:1.3fr repeat(3,1fr);gap:10px;margin-bottom:14px}.stat{padding:15px;background:rgba(255,255,255,.65);border:1px solid var(--line)}.label{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}.value{margin-top:7px;font:800 28px/1 Georgia,serif}.progress{height:7px;margin-top:13px;background:#e4ddd2;overflow:hidden}.progress span{display:block;height:100%;width:0;background:var(--orange);transition:width .25s ease}
+    .controls{display:flex;flex-wrap:wrap;align-items:center;gap:7px;padding:10px;border:1px solid var(--line);background:rgba(255,255,255,.55);margin-bottom:14px}.filter{padding:9px 12px;border:0;background:transparent;color:var(--ink);cursor:pointer}.filter.active{background:var(--ink);color:#fff}.reset{margin-left:auto;padding:9px 12px;border:0;background:transparent;color:var(--red);cursor:pointer}
+    .workspace{display:grid;grid-template-columns:1fr 330px;gap:15px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.case{min-height:190px;padding:15px;background:var(--panel);border:1px solid var(--line);cursor:pointer;text-align:left;color:var(--ink);position:relative}.case:hover,.case.selected{border-color:var(--orange);box-shadow:inset 0 0 0 1px var(--orange)}.case.done{opacity:.62}.case-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.num{display:grid;place-items:center;width:38px;height:38px;border:2px solid var(--c);border-radius:50%;font:800 19px/1 Georgia,serif;color:var(--c)}.family{font:700 9px/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--c)}.case h2{margin:14px 0 8px;font:800 19px/1.12 Georgia,serif}.case p{margin:0;color:var(--muted);font-size:13px;line-height:1.45}.tick{position:absolute;right:12px;bottom:10px;color:var(--green);font-weight:800}
+    .detail{position:sticky;top:14px;align-self:start;padding:20px;background:#fff1e9;border:1px solid #e5bca8}.detail .big{font:900 54px/1 Georgia,serif;color:var(--orange)}.detail h2{margin:7px 0 10px;font:800 27px/1.05 Georgia,serif}.detail p{color:#604d44;line-height:1.55}.detail ol{padding-left:20px;color:#604d44;line-height:1.6}.complete{display:flex;align-items:center;gap:9px;margin-top:17px;padding-top:15px;border-top:1px solid #e5bca8;font-weight:700}.complete input{width:21px;height:21px;accent-color:var(--orange)}.risk{margin-top:15px;padding:11px;border-left:4px solid var(--orange);background:rgba(255,255,255,.55);font-size:12px;line-height:1.5;color:#604d44}
+    .legend{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:22px;padding-top:18px;border-top:2px solid var(--ink)}.legend div{padding-top:9px;border-top:5px solid var(--c);font-size:12px}.legend b{display:block;margin-bottom:4px}.footer{display:flex;justify-content:space-between;gap:16px;margin-top:22px;padding-top:14px;border-top:1px solid var(--line);color:var(--muted);font-size:11px}
+    @media(max-width:960px){.summary{grid-template-columns:1fr 1fr}.workspace{grid-template-columns:1fr}.detail{position:static}.grid{grid-template-columns:1fr 1fr}.legend{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:580px){.sheet{width:100%;margin:0;padding:18px}.top{display:block}.top span:last-child{display:block;margin-top:7px}.summary{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.legend{grid-template-columns:1fr 1fr}.reset{margin-left:0}.footer{display:block}.footer span{display:block;margin-top:5px}}
+  </style>
+</head>
+<body>
+<main class="sheet">
+  <div class="top"><span>Claude capability portfolio</span><span><span class="mark">✦</span> 5 направлений · 12 сценариев</span></div>
+  <h1>12 ВЕЩЕЙ, КОТОРЫЕ МОЖНО ДЕЛАТЬ С <span class="orange">CLAUDE</span></h1>
+  <p class="lead">Выберите направление, изучите сценарий и отметьте освоенное. Карта отделяет быстрые задачи от процессов, где нужны права доступа, тесты и человеческое подтверждение.</p>
+
+  <section class="summary">
+    <div class="stat"><div class="label">Освоено</div><div class="value" id="percent">0%</div><div class="progress" role="progressbar" aria-label="Освоено сценариев" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="bar"></span></div></div>
+    <div class="stat"><div class="label">Сценарии</div><div class="value" id="count">0/12</div></div>
+    <div class="stat"><div class="label">Направления</div><div class="value" id="families">0/5</div></div>
+    <div class="stat"><div class="label">Следующий</div><div class="value" id="next">01</div></div>
+  </section>
+
+  <div class="controls" aria-label="Фильтр сценариев" id="filters"></div>
+
+  <section class="workspace">
+    <div class="grid" id="grid" aria-live="polite"></div>
+    <aside class="detail" id="detail" aria-live="polite"></aside>
+  </section>
+
+  <section class="legend">
+    <div style="--c:var(--blue)"><b>Разработка</b>Код, MCP и ревью.</div>
+    <div style="--c:var(--green)"><b>Знания</b>RAG и анализ систем.</div>
+    <div style="--c:var(--purple)"><b>Карьера</b>Интервью и резюме.</div>
+    <div style="--c:var(--gold)"><b>Автоматизация</b>Браузер и расписание.</div>
+    <div style="--c:var(--orange)"><b>Создание</b>Страницы и презентации.</div>
+  </section>
+
+  <footer class="footer"><span>Интерактивная карта возможностей · База знаний · 2026</span><span>Автономность повышает требования к ограничениям и проверке.</span></footer>
+</main>
+
+<script>
+const items=[
+ {n:1,f:'dev',title:'CLI-инструмент за минуту',short:'Описание превращается в команду, код и тесты.',steps:['Сформулировать одну команду и входы','Сгенерировать реализацию и тесты','Запустить в изолированной среде'],risk:'Проверяйте команды, пути и операции с файлами до первого запуска.'},
+ {n:2,f:'dev',title:'Свой MCP-сервер',short:'Инструменты и данные становятся управляемой интеграцией.',steps:['Описать инструменты и схемы','Настроить авторизацию и границы','Протестировать каждый вызов'],risk:'Выдавайте минимальные права и исключайте секреты из ответов и журналов.'},
+ {n:3,f:'knowledge',title:'Личный RAG-помощник',short:'Ответы по заметкам и документам со ссылками на источники.',steps:['Подключить выбранные источники','Задать правила цитирования','Проверить ответы по оригиналам'],risk:'Ответ без подтверждаемой ссылки следует считать предположением.'},
+ {n:4,f:'knowledge',title:'Разобрать любой код',short:'Карта архитектуры, зависимости и ключевые потоки незнакомого проекта.',steps:['Загрузить репозиторий','Попросить карту модулей и потоков','Проверить объяснение по коду'],risk:'Не доверяйте описанию архитектуры без сверки с реальными файлами и тестами.'},
+ {n:5,f:'career',title:'Тренировка собеседования',short:'Интервью по роли с уточнениями и разбором ответов.',steps:['Задать роль и тип раунда','Пройти вопросы без подсказок','Получить обратную связь и повторить'],risk:'Используйте обратную связь как тренировку, а не как единственный критерий готовности.'},
+ {n:6,f:'automation',title:'Задачи в браузере',short:'Последовательные веб-действия по понятной инструкции.',steps:['Описать конечный результат','Разделить чтение и изменения','Подтверждать критические действия'],risk:'Публикации, покупки, удаления и отправки требуют явного подтверждения человеком.'},
+ {n:7,f:'career',title:'Резюме под вакансию',short:'Сопоставление опыта с требованиями и улучшение формулировок.',steps:['Добавить резюме и вакансию','Сохранить только реальные факты','Вычитать итоговую версию'],risk:'Не добавляйте навыки и достижения, которых не было в исходных данных.'},
+ {n:8,f:'automation',title:'Регулярные процессы',short:'Повторяемая задача с источниками и результатом по расписанию.',steps:['Выбрать стабильный процесс','Определить входы и место результата','Добавить проверку и уведомление'],risk:'Автоматизация должна безопасно завершаться при отсутствии или изменении входных данных.'},
+ {n:9,f:'creation',title:'Лендинг и питч-дек',short:'Идея превращается в структуру, текст и прототип.',steps:['Определить аудиторию и цель','Собрать структуру и аргументы','Проверить факты, стиль и призыв'],risk:'Факты, цифры, права на материалы и обещания требуют отдельной проверки.'},
+ {n:10,f:'dev',title:'Параллельное ревью кода',short:'Независимые проверки безопасности, логики, скорости и стиля.',steps:['Разделить критерии между ревьюерами','Запустить независимые проверки','Синтезировать и устранить дубли'],risk:'Финальное решение принимает ответственный разработчик после воспроизводимой проверки.'},
+ {n:11,f:'dev',title:'Автономная реализация',short:'От спецификации и тестов до готового PR для ревью.',steps:['Ограничить область изменений','Задать критерии и команды проверки','Просмотреть diff и результаты тестов'],risk:'Не разрешайте автономные изменения за пределами согласованного репозитория и задачи.'},
+ {n:12,f:'dev',title:'Своя Skill или команда',short:'Повторяемый рабочий процесс становится формализованной инструкцией.',steps:['Определить триггер и входы','Описать шаги и проверки','Прогнать на позитивных и негативных примерах'],risk:'Узкая и проверяемая инструкция надёжнее универсальной команды без границ.'}
+];
+const meta={all:{name:'Все',color:'var(--ink)'},dev:{name:'Разработка',color:'var(--blue)'},knowledge:{name:'Знания',color:'var(--green)'},career:{name:'Карьера',color:'var(--purple)'},automation:{name:'Автоматизация',color:'var(--gold)'},creation:{name:'Создание',color:'var(--orange)'}};
+const key='kb-claude-use-cases-v1';let state={filter:'all',selected:1,done:[]};try{state={...state,...JSON.parse(localStorage.getItem(key)||'{}')}}catch(e){}
+const filters=document.querySelector('#filters'),grid=document.querySelector('#grid'),detail=document.querySelector('#detail');
+function save(){localStorage.setItem(key,JSON.stringify(state))}
+function render(){
+ filters.innerHTML=Object.entries(meta).map(([k,v])=>`<button class="filter ${state.filter===k?'active':''}" type="button" data-filter="${k}" aria-pressed="${state.filter===k}">${v.name}</button>`).join('')+'<button class="reset" id="reset" type="button">Сбросить отметки</button>';
+ const visible=items.filter(x=>state.filter==='all'||x.f===state.filter);if(!visible.some(x=>x.n===state.selected))state.selected=visible[0]?.n||1;
+ grid.innerHTML=visible.map(x=>`<button type="button" class="case ${x.n===state.selected?'selected':''} ${state.done.includes(x.n)?'done':''}" data-case="${x.n}" style="--c:${meta[x.f].color}"><div class="case-head"><span class="num">${x.n}</span><span class="family">${meta[x.f].name}</span></div><h2>${x.title}</h2><p>${x.short}</p>${state.done.includes(x.n)?'<span class="tick">✓ освоено</span>':''}</button>`).join('');
+ const x=items.find(i=>i.n===state.selected);detail.innerHTML=`<div class="big">${String(x.n).padStart(2,'0')}</div><div class="label">${meta[x.f].name}</div><h2>${x.title}</h2><p>${x.short}</p><ol>${x.steps.map(s=>`<li>${s}</li>`).join('')}</ol><label class="complete"><input id="complete" type="checkbox" ${state.done.includes(x.n)?'checked':''}> Сценарий освоен</label><div class="risk"><b>Контроль:</b> ${x.risk}</div>`;
+ const count=state.done.length,pct=Math.round(count/12*100),families=new Set(items.filter(i=>state.done.includes(i.n)).map(i=>i.f)).size,next=items.find(i=>!state.done.includes(i.n));document.querySelector('#percent').textContent=pct+'%';document.querySelector('#count').textContent=count+'/12';document.querySelector('#families').textContent=families+'/5';document.querySelector('#next').textContent=next?String(next.n).padStart(2,'0'):'✓';document.querySelector('#bar').style.width=pct+'%';document.querySelector('.progress').setAttribute('aria-valuenow',pct);
+ filters.querySelectorAll('[data-filter]').forEach(b=>b.addEventListener('click',()=>{state.filter=b.dataset.filter;save();render()}));document.querySelector('#reset').addEventListener('click',()=>{if(confirm('Сбросить все отметки?')){state={filter:'all',selected:1,done:[]};save();render()}});grid.querySelectorAll('[data-case]').forEach(b=>b.addEventListener('click',()=>{state.selected=Number(b.dataset.case);save();render()}));document.querySelector('#complete').addEventListener('change',e=>{state.done=e.target.checked?[...new Set([...state.done,x.n])]:state.done.filter(n=>n!==x.n);save();render()});
+}
+render();
+</script>
+</body>
+</html>

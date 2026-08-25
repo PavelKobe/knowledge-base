@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>12 концепций API — интерактивная карта</title>
+  <style>
+    :root {
+      --bg: #070914;
+      --panel: #0d1020;
+      --panel-2: #11162a;
+      --line: #242a43;
+      --text: #f3f5ff;
+      --muted: #929bb8;
+      --violet: #8b5cf6;
+      --cyan: #22d3ee;
+      --green: #45e6a8;
+      --amber: #fbbf24;
+      --red: #fb7185;
+      --shadow: 0 24px 70px rgba(0, 0, 0, .36);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 78% -10%, rgba(139, 92, 246, .17), transparent 32rem),
+        radial-gradient(circle at -5% 24%, rgba(34, 211, 238, .08), transparent 28rem),
+        var(--bg);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    button, input { font: inherit; }
+    button { color: inherit; }
+    a { color: inherit; }
+    :focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
+
+    .shell { width: min(1480px, calc(100% - 32px)); margin: 0 auto; padding: 30px 0 64px; }
+    .topbar { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 46px; }
+    .brand { display: flex; align-items: center; gap: 11px; font-size: 13px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+    .brand-mark { display: grid; place-items: center; width: 35px; height: 35px; border: 1px solid #55449a; border-radius: 11px; color: #bca7ff; background: linear-gradient(145deg, #211944, #101329); box-shadow: inset 0 0 20px rgba(139,92,246,.15); }
+    .status { display: flex; align-items: center; gap: 9px; color: var(--muted); font: 600 12px/1.2 ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 16px var(--green); animation: blink 2s infinite; }
+
+    .hero { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(310px, .75fr); gap: 42px; align-items: end; margin-bottom: 32px; }
+    .eyebrow { display: flex; align-items: center; gap: 10px; color: #a892ff; font: 700 12px/1 ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .12em; text-transform: uppercase; }
+    .eyebrow::before { content: ""; width: 30px; height: 1px; background: currentColor; }
+    h1 { margin: 16px 0 16px; max-width: 920px; font-size: clamp(42px, 6.4vw, 94px); line-height: .92; letter-spacing: -.065em; }
+    h1 span { color: transparent; -webkit-text-stroke: 1px #767e9b; }
+    .lead { max-width: 730px; margin: 0; color: #b1b8d0; font-size: clamp(16px, 1.5vw, 20px); line-height: 1.55; }
+    .hero-aside { border-left: 1px solid var(--line); padding-left: 24px; color: var(--muted); font-size: 14px; line-height: 1.6; }
+    .hero-aside strong { display: block; margin-bottom: 6px; color: var(--text); font-size: 28px; letter-spacing: -.04em; }
+
+    .controls { position: sticky; top: 12px; z-index: 10; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 10px; margin-bottom: 18px; border: 1px solid rgba(65,73,107,.75); border-radius: 16px; background: rgba(9,12,25,.86); box-shadow: 0 14px 40px rgba(0,0,0,.25); backdrop-filter: blur(18px); }
+    .filter { border: 1px solid transparent; border-radius: 10px; padding: 9px 13px; background: transparent; color: var(--muted); cursor: pointer; transition: .2s ease; }
+    .filter:hover { color: var(--text); background: #151a2d; }
+    .filter.active { color: #fff; border-color: #57489d; background: #211b3f; }
+    .search { flex: 1 1 210px; min-width: 180px; border: 1px solid var(--line); border-radius: 10px; padding: 10px 13px; color: var(--text); background: #0a0d1b; }
+    .search::placeholder { color: #69718d; }
+    .chain-button { border: 1px solid #654fae; border-radius: 10px; padding: 10px 14px; background: linear-gradient(135deg, #392a6c, #1c254f); cursor: pointer; font-weight: 750; }
+
+    .grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+    .card { position: relative; min-height: 330px; overflow: hidden; border: 0; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 21px; text-align: left; background: rgba(10,13,27,.62); cursor: pointer; transition: background .25s ease, transform .25s ease, opacity .25s ease; }
+    .card:hover { z-index: 2; background: #10152a; box-shadow: var(--shadow); transform: translateY(-3px); }
+    .card.hidden { display: none; }
+    .card.dimmed { opacity: .18; }
+    .card.lit { z-index: 3; background: #171435; box-shadow: inset 0 0 0 1px #7055cf, 0 0 36px rgba(139,92,246,.24); }
+    .meta { display: flex; justify-content: space-between; align-items: center; color: #747d9d; font: 700 11px/1 ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .1em; text-transform: uppercase; }
+    .category-dot { color: var(--accent); }
+    .card h2 { margin: 17px 0 5px; font-size: 21px; letter-spacing: -.025em; }
+    .card-subtitle { min-height: 38px; margin: 0; color: var(--muted); font-size: 13px; line-height: 1.45; }
+    .demo { position: relative; height: 143px; margin: 17px 0 14px; overflow: hidden; border: 1px solid #222941; border-radius: 12px; background: linear-gradient(180deg, #090c18, #0b0f20); }
+    .takeaway { display: flex; gap: 8px; color: #cbd1e4; font-size: 12px; line-height: 1.45; }
+    .takeaway::before { content: "↳"; color: var(--accent); font-weight: 900; }
+    .open-hint { position: absolute; right: 17px; bottom: 15px; color: #68708d; font-size: 11px; opacity: 0; transition: opacity .2s; }
+    .card:hover .open-hint { opacity: 1; }
+
+    .node { position: absolute; display: grid; place-items: center; min-width: 50px; height: 30px; border: 1px solid #34405f; border-radius: 7px; padding: 0 8px; color: #cfd5e9; background: #11172a; font: 700 10px/1 ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .node.client { left: 13px; top: 55px; }
+    .node.server { right: 13px; top: 55px; }
+    .packet { position: absolute; left: 67px; top: 65px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 14px var(--accent); animation: travel 2.5s ease-in-out infinite; }
+    .track { position: absolute; left: 62px; right: 62px; top: 68px; height: 1px; background: repeating-linear-gradient(90deg, #303955 0 6px, transparent 6px 11px); }
+    .label { position: absolute; color: #717b9a; font: 700 9px/1 ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .http-verb { left: 50%; top: 20px; transform: translateX(-50%); color: var(--accent); }
+    .response { left: 50%; bottom: 18px; transform: translateX(-50%); }
+    .counter { position: absolute; left: 50%; top: 55%; transform: translate(-50%, -50%); color: var(--green); font: 800 18px/1 ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .duplicate { animation: duplicate 2.8s infinite; }
+    .rows { position: absolute; inset: 17px 24px; display: grid; gap: 5px; }
+    .row { height: 8px; border-radius: 3px; background: #222a43; }
+    .row:nth-child(-n+3) { background: color-mix(in srgb, var(--accent) 45%, #222a43); }
+    .cursor { position: absolute; right: 16px; top: 14px; color: var(--accent); font: 700 9px ui-monospace, monospace; }
+    .bucket { position: absolute; left: 18px; right: 18px; bottom: 25px; display: flex; gap: 5px; }
+    .token { flex: 1; height: 14px; border-radius: 4px; background: var(--green); animation: drain 3s steps(1) infinite; }
+    .token:nth-child(2) { animation-delay: -.5s; }.token:nth-child(3) { animation-delay: -1s;}.token:nth-child(4) { animation-delay: -1.5s;}.token:nth-child(5) { animation-delay: -2s;}
+    .limit-code { top: 25px; left: 50%; transform: translateX(-50%); color: var(--red); font: 900 26px ui-monospace, monospace; }
+    .versions { position: absolute; inset: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .version { display: grid; place-items: center; border: 1px solid #34405f; border-radius: 10px; color: #aeb6ce; font: 900 17px ui-monospace, monospace; }
+    .version:last-child { border-color: var(--accent); color: var(--accent); animation: breathe 2.2s infinite; }
+    .hook-arrow { position: absolute; left: 45px; right: 45px; top: 68px; height: 2px; background: linear-gradient(90deg, var(--accent), transparent); transform: rotate(180deg); }
+    .hook-arrow::after { content: "◀"; position: absolute; right: -5px; top: -8px; color: var(--accent); }
+    .frames { position: absolute; inset: 17px; display: grid; grid-template-columns: repeat(8,1fr); gap: 4px; align-content: center; }
+    .frame { height: 26px; border-radius: 3px; background: #282f48; animation: framePulse 1.8s infinite; }
+    .frame:nth-child(2n) { animation-delay: -.4s; }.frame:nth-child(3n) { animation-delay: -.8s; }
+    .query { position: absolute; left: 15px; top: 18px; color: #9ca6c2; font: 700 9px/1.8 ui-monospace, monospace; }
+    .query b { color: var(--accent); }
+    .result-fields { position: absolute; right: 15px; top: 21px; display: grid; gap: 7px; }
+    .field { width: 70px; height: 15px; border-left: 3px solid var(--green); background: #17263a; animation: fieldIn 2.4s infinite; }
+    .lock { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); font-size: 36px; filter: drop-shadow(0 0 14px rgba(139,92,246,.45)); }
+    .scope { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); color: var(--green); font: 700 9px ui-monospace, monospace; white-space: nowrap; }
+    .retry-bars { position: absolute; inset: 28px 23px; display: flex; align-items: end; gap: 9px; }
+    .retry-bar { flex: 1; height: 18px; border-radius: 4px 4px 0 0; background: var(--accent); opacity: .45; animation: retry 3.5s infinite; }
+    .retry-bar:nth-child(2) { height: 36px; animation-delay: -.5s; }.retry-bar:nth-child(3) { height: 64px; animation-delay: -1s; }.retry-bar:nth-child(4) { height: 88px; animation-delay: -1.5s; }
+    .deadline { position: absolute; left: 18px; right: 18px; top: 67px; height: 4px; border-radius: 9px; background: #252c45; }
+    .deadline::before { content: ""; display: block; width: 80%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--green), var(--amber), var(--red)); animation: timeout 2.7s infinite; }
+    .deadline::after { content: "504"; position: absolute; right: 0; top: -26px; color: var(--red); font: 900 15px ui-monospace, monospace; }
+    .codes { position: absolute; inset: 21px; display: grid; grid-template-columns: repeat(2,1fr); gap: 8px; }
+    .code { display: grid; place-items: center; border: 1px solid #2e3652; border-radius: 7px; color: #c2c9df; font: 900 16px ui-monospace, monospace; }
+    .code:nth-child(1) { color: var(--green); }.code:nth-child(2) { color: var(--cyan); }.code:nth-child(3) { color: var(--amber); }.code:nth-child(4) { color: var(--red); }
+
+    .chain { display: none; margin: 18px 0 28px; border: 1px solid #574a92; border-radius: 18px; padding: 24px; background: linear-gradient(135deg, rgba(42,30,84,.65), rgba(10,14,30,.92)); }
+    .chain.visible { display: block; animation: reveal .35s ease; }
+    .chain-head { display: flex; justify-content: space-between; gap: 20px; align-items: start; margin-bottom: 20px; }
+    .chain h2 { margin: 0 0 5px; font-size: 25px; }
+    .chain p { margin: 0; color: var(--muted); }
+    .chain-flow { display: grid; grid-template-columns: repeat(5,1fr); gap: 22px; }
+    .chain-step { position: relative; min-height: 108px; border: 1px solid #343b59; border-radius: 12px; padding: 14px; background: #0e1224; }
+    .chain-step:not(:last-child)::after { content: "→"; position: absolute; right: -19px; top: 42%; color: #7764bd; }
+    .chain-step b { display: block; margin-bottom: 7px; color: #dcd5ff; }
+    .chain-step span { color: var(--muted); font-size: 12px; line-height: 1.4; }
+    .close-chain { border: 0; background: transparent; color: var(--muted); cursor: pointer; }
+
+    dialog { width: min(820px, calc(100% - 28px)); max-height: min(780px, calc(100vh - 28px)); overflow: auto; border: 1px solid #3d4567; border-radius: 20px; padding: 0; color: var(--text); background: #0c1020; box-shadow: 0 40px 100px rgba(0,0,0,.66); }
+    dialog::backdrop { background: rgba(2,4,12,.8); backdrop-filter: blur(8px); }
+    .dialog-inner { padding: 28px; }
+    .dialog-top { display: flex; justify-content: space-between; gap: 25px; align-items: start; }
+    .dialog-index { color: var(--dialog-accent); font: 800 12px ui-monospace, monospace; letter-spacing: .14em; }
+    .dialog-title { margin: 9px 0 8px; font-size: clamp(30px,5vw,48px); letter-spacing: -.05em; }
+    .dialog-lead { max-width: 620px; margin: 0; color: #aab2cb; line-height: 1.55; }
+    .dialog-close { flex: 0 0 auto; width: 38px; height: 38px; border: 1px solid #303854; border-radius: 50%; background: #12172a; cursor: pointer; }
+    .dialog-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 24px; }
+    .info { border: 1px solid #282f49; border-radius: 13px; padding: 16px; background: #0a0e1b; }
+    .info h3 { margin: 0 0 10px; color: #7f89a8; font: 800 10px ui-monospace, monospace; letter-spacing: .13em; text-transform: uppercase; }
+    .info p, .info ul { margin: 0; color: #c4cadc; font-size: 14px; line-height: 1.55; }
+    .info ul { padding-left: 18px; }
+    .info pre { margin: 0; overflow: auto; color: #c8f7e7; font: 12px/1.6 ui-monospace, SFMono-Regular, Consolas, monospace; white-space: pre-wrap; }
+    .info.wide { grid-column: 1 / -1; }
+    footer { display: flex; justify-content: space-between; gap: 20px; margin-top: 30px; color: #68718d; font-size: 12px; }
+
+    @keyframes blink { 50% { opacity: .35; } }
+    @keyframes travel { 0%,10% { transform: translateX(0); opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 90%,100% { transform: translateX(115px); opacity: 0; } }
+    @keyframes duplicate { 50% { text-shadow: 12px 8px 0 rgba(69,230,168,.22); } }
+    @keyframes drain { 0%,45% { opacity: 1; } 46%,85% { opacity: .13; } }
+    @keyframes breathe { 50% { box-shadow: inset 0 0 20px color-mix(in srgb, var(--accent) 22%, transparent); } }
+    @keyframes framePulse { 50% { background: var(--accent); opacity: .7; transform: translateY(-4px); } }
+    @keyframes fieldIn { 0%,25% { transform: translateX(20px); opacity: 0; } 50%,100% { transform: none; opacity: 1; } }
+    @keyframes retry { 50% { opacity: 1; filter: brightness(1.35); } }
+    @keyframes timeout { 0% { width: 0; } 78% { width: 80%; } 100% { width: 100%; opacity: 0; } }
+    @keyframes reveal { from { opacity: 0; transform: translateY(-8px); } }
+
+    @media (max-width: 1120px) { .grid { grid-template-columns: repeat(3,1fr); } .chain-flow { grid-template-columns: repeat(3,1fr); } .chain-step::after { display:none; } }
+    @media (max-width: 820px) { .hero { grid-template-columns: 1fr; } .hero-aside { display:none; } .grid { grid-template-columns: repeat(2,1fr); } .dialog-grid { grid-template-columns: 1fr; } .info.wide { grid-column:auto; } }
+    @media (max-width: 560px) { .shell { width:min(100% - 20px,1480px); padding-top:18px; } .topbar { margin-bottom:34px; } .status { display:none; } h1 { font-size:48px; } .grid { grid-template-columns:1fr; } .card { min-height:310px; } .chain-flow { grid-template-columns:1fr; } footer { flex-direction:column; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; scroll-behavior:auto !important; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">&lt;/&gt;</span> API Field Guide</div>
+      <div class="status"><span class="pulse"></span> interactive map · v1.0</div>
+    </header>
+
+    <section class="hero">
+      <div>
+        <div class="eyebrow">System design · 12 concepts</div>
+        <h1>API — это <span>поведение</span>, а не URL</h1>
+        <p class="lead">Карта двенадцати концепций, которые превращают happy path в API, способный пережить реальный трафик. Нажмите на любую карточку, чтобы открыть сценарий и правила проектирования.</p>
+      </div>
+      <aside class="hero-aside"><strong>12 / 12</strong>От контракта запроса до поведения системы при сбоях. Карточки объединены в три слоя: контракт, доставка и устойчивость.</aside>
+    </section>
+
+    <nav class="controls" aria-label="Фильтры концепций">
+      <button class="filter active" data-filter="all">Все 12</button>
+      <button class="filter" data-filter="contract">Контракт</button>
+      <button class="filter" data-filter="transport">Доставка</button>
+      <button class="filter" data-filter="resilience">Устойчивость</button>
+      <input class="search" type="search" placeholder="Найти концепцию…" aria-label="Поиск концепции">
+      <button class="chain-button" id="chainButton">▶ Показать цепочку сбоя</button>
+    </nav>
+
+    <section class="chain" id="failureChain" aria-label="Цепочка устойчивости">
+      <div class="chain-head"><div><h2>Один сбой связывает пять концепций</h2><p>Это не отдельные опции — это одна причинно-следственная цепочка.</p></div><button class="close-chain" aria-label="Закрыть цепочку">✕</button></div>
+      <div class="chain-flow">
+        <div class="chain-step"><b>1. Запрос завис</b><span>Клиент не может ждать бесконечно.</span></div>
+        <div class="chain-step"><b>2. Timeout</b><span>Дедлайн прерывает ожидание, но не доказывает, что операция не выполнилась.</span></div>
+        <div class="chain-step"><b>3. Retry</b><span>Клиент повторяет запрос с backoff и jitter.</span></div>
+        <div class="chain-step"><b>4. Idempotency</b><span>Повтор не создаёт второй заказ или платёж.</span></div>
+        <div class="chain-step"><b>5. Rate limit</b><span>Массовые повторы не превращаются в лавину.</span></div>
+      </div>
+    </section>
+
+    <section class="grid" id="grid" aria-label="12 концепций API"></section>
+
+    <footer><span>Интерактивный конспект для базы знаний · 2026</span><span>Совет: начните с цепочки сбоя, затем откройте карточки 02, 10, 11 и 04.</span></footer>
+  </main>
+
+  <dialog id="detailDialog" aria-labelledby="dialogTitle">
+    <div class="dialog-inner">
+      <div class="dialog-top">
+        <div><div class="dialog-index" id="dialogIndex"></div><h2 class="dialog-title" id="dialogTitle"></h2><p class="dialog-lead" id="dialogLead"></p></div>
+        <button class="dialog-close" aria-label="Закрыть">✕</button>
+      </div>
+      <div class="dialog-grid">
+        <section class="info"><h3>Ментальная модель</h3><p id="dialogModel"></p></section>
+        <section class="info"><h3>Когда применять</h3><p id="dialogWhen"></p></section>
+        <section class="info wide"><h3>Пример контракта</h3><pre id="dialogCode"></pre></section>
+        <section class="info"><h3>Проверьте</h3><ul id="dialogChecks"></ul></section>
+        <section class="info"><h3>Типичная ошибка</h3><p id="dialogMistake"></p></section>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+    const concepts = [
+      { id:'rest', n:'01', title:'REST', subtitle:'Методы действуют над ресурсами', cat:'contract', accent:'#8b5cf6', demo:'route', takeaway:'URL — существительное, HTTP-метод — действие.', lead:'Предсказуемый интерфейс вокруг ресурсов и стандартной семантики HTTP.', model:'Клиент работает с ресурсами: users, orders, products. Метод сообщает намерение, URL — объект действия.', when:'Публичные и внутренние HTTP API, CRUD, интеграции и веб-приложения.', code:'GET    /users/42\nPOST   /orders\nPATCH  /orders/15\nDELETE /sessions/current', checks:['Корректны ли HTTP-методы?','URL названы существительными?','Статусы отражают результат?'], mistake:'Командные URL вида /createOrder и возврат 200 для любой ошибки.' },
+      { id:'idempotency', n:'02', title:'Идемпотентность', subtitle:'Повтор не меняет итог операции', cat:'resilience', accent:'#45e6a8', demo:'idempotency', takeaway:'Один ключ — один результат, даже при повторе.', lead:'Защита денежных и создающих операций от дублей при повторной доставке.', model:'Сервер запоминает результат первого запроса по уникальному ключу и возвращает его для повторов.', when:'Платежи, создание заказов, бронирования и любые POST, которые клиент может повторить.', code:'POST /orders\nIdempotency-Key: 8e5c...\n\n# два запроса → orders_created: 1', checks:['Ключ связан с пользователем?','Сравнивается ли тело повтора?','Определён TTL ключа?'], mistake:'Считать, что timeout означает «операция точно не выполнилась», и слепо повторять POST.' },
+      { id:'pagination', n:'03', title:'Пагинация', subtitle:'Большие коллекции отдаются порциями', cat:'contract', accent:'#22d3ee', demo:'pagination', takeaway:'Cursor стабилен при вставках, offset — проще.', lead:'Контракт чтения коллекции, который ограничивает объём ответа и нагрузку.', model:'Клиент получает страницу и указатель на продолжение, а не всю таблицу сразу.', when:'Ленты, события, заказы, аудит-логи и любые растущие списки.', code:'GET /events?limit=20&cursor=eyJpZCI6...\n\n{ "items": [...], "next_cursor": "..." }', checks:['Есть верхний предел limit?','Сортировка детерминирована?','Cursor непрозрачен клиенту?'], mistake:'Offset-пагинация в быстро меняющейся ленте: элементы дублируются или пропускаются.' },
+      { id:'rate-limits', n:'04', title:'Rate limits', subtitle:'Бюджет запросов защищает сервис', cat:'resilience', accent:'#fb7185', demo:'rate', takeaway:'429 должен объяснять, когда вернуться.', lead:'Управляемое ограничение частоты, защищающее сервис и справедливо делящее ёмкость.', model:'У каждого клиента есть восстанавливаемый бюджет токенов. Исчерпал — получает 429 и паузу.', when:'Публичные API, дорогие операции, login, генерация, поиск и защита зависимостей.', code:'HTTP/1.1 429 Too Many Requests\nRetry-After: 30\nX-RateLimit-Remaining: 0', checks:['Лимит по пользователю, IP или ключу?','Есть Retry-After?','Разные ли бюджеты у операций?'], mistake:'Один глобальный лимит без идентичности клиента или 429 без инструкции для retry.' },
+      { id:'versioning', n:'05', title:'Версионирование', subtitle:'Старый и новый контракт живут рядом', cat:'contract', accent:'#fbbf24', demo:'versions', takeaway:'Версию повышают при breaking change.', lead:'Способ менять контракт, не ломая уже выпущенных клиентов.', model:'v1 остаётся стабильным, пока клиенты мигрируют на v2 в известный период поддержки.', when:'Внешние API, мобильные клиенты и интеграции с независимым циклом релизов.', code:'GET /api/v1/orders/42\nGET /api/v2/orders/42\n\nSunset: Sat, 31 Jan 2027 00:00:00 GMT', checks:['Что считается breaking change?','Есть срок поддержки v1?','Измеряется доля старых клиентов?'], mistake:'Создавать новую версию для каждого необязательного поля или молча менять смысл поля.' },
+      { id:'webhooks', n:'06', title:'Webhooks', subtitle:'Теперь их сервер вызывает ваше приложение', cat:'transport', accent:'#22d3ee', demo:'webhook', takeaway:'Проверяйте подпись и отвечайте быстро.', lead:'Push-доставка события от поставщика к вашему публичному endpoint.', model:'Направление запроса разворачивается: вы регистрируете callback, поставщик присылает событие.', when:'Статусы платежей, доставки, звонков, CI, документы и асинхронные процессы.', code:'POST /webhooks/payment\nX-Signature: sha256=...\n\n{ "event_id":"evt_42", "type":"paid" }', checks:['Проверяется подпись?','Есть дедупликация event_id?','Обработка вынесена из ответа?'], mistake:'Долго обрабатывать webhook до ответа или доверять телу без проверки подписи.' },
+      { id:'grpc', n:'07', title:'gRPC', subtitle:'Бинарный контракт и стримы поверх HTTP/2', cat:'transport', accent:'#8b5cf6', demo:'grpc', takeaway:'Сильный контракт важнее читаемого JSON.', lead:'Высокопроизводительное RPC-взаимодействие по типизированной protobuf-схеме.', model:'Клиент вызывает удалённый метод как функцию; код и типы генерируются из .proto.', when:'Внутренние сервисы, низкая задержка, полиглотная система и двунаправленные стримы.', code:'rpc StreamEvents(StreamRequest)\n  returns (stream Event);\n\nmessage Event { string id = 1; }', checks:['Совместимы ли изменения proto?','Нужен ли REST gateway?','Настроены deadlines?'], mistake:'Переиспользовать номера удалённых полей protobuf или не передавать deadline.' },
+      { id:'graphql', n:'08', title:'GraphQL', subtitle:'Клиент запрашивает ровно нужные поля', cat:'contract', accent:'#fb7185', demo:'graphql', takeaway:'3 поля запрошено — 3 возвращено.', lead:'Типизированный граф данных, позволяющий клиенту формировать форму ответа.', model:'Один endpoint принимает запрос-проекцию; схема определяет типы и связи.', when:'Сложные продуктовые интерфейсы, много клиентов и агрегирование связанных данных.', code:'query {\n  user(id: 42) {\n    name\n    avatar\n    plan\n  }\n}', checks:['Ограничена глубина/сложность?','Решена проблема N+1?','Есть field-level auth?'], mistake:'Разрешить произвольную глубину запроса без cost analysis и лимитов.' },
+      { id:'auth', n:'09', title:'Auth + scopes', subtitle:'Кто вы и что вам разрешено', cat:'contract', accent:'#45e6a8', demo:'auth', takeaway:'Нет токена → 401; мало прав → 403.', lead:'Аутентификация устанавливает личность, авторизация проверяет конкретное действие.', model:'Bearer-токен несёт identity и scopes, но сервер всё равно проверяет доступ к ресурсу.', when:'Любые приватные данные и операции от имени пользователя или сервиса.', code:'Authorization: Bearer eyJ...\nScope: orders:read\n\n401 — не вошёл\n403 — вошёл, но нельзя', checks:['Проверяется доступ к объекту?','Минимальны ли scopes?','Токен не попадает в логи?'], mistake:'Проверить только факт логина и забыть, что user A не должен читать ресурс user B.' },
+      { id:'retries', n:'10', title:'Retries', subtitle:'Повтор с backoff и обязательным jitter', cat:'resilience', accent:'#fbbf24', demo:'retry', takeaway:'1s → 2s → 4s + случайность.', lead:'Контролируемый повтор временно неудавшейся операции без синхронного шторма клиентов.', model:'Пауза растёт экспоненциально, а jitter размывает одинаковые моменты возвращения клиентов.', when:'Сетевые ошибки, 429, 502, 503 и 504 — только для безопасных или идемпотентных операций.', code:'delay = min(cap, base * 2**attempt)\nwait = random(0, delay)\n\nне retry: 400, 401, 403, 422', checks:['Операция безопасна для повтора?','Есть max attempts?','Учитывается Retry-After?'], mistake:'10 000 клиентов повторяют ровно через 1, 2 и 4 секунды и снова кладут сервис.' },
+      { id:'timeouts', n:'11', title:'Timeouts', subtitle:'У каждого запроса есть дедлайн', cat:'resilience', accent:'#fb7185', demo:'timeout', takeaway:'Дедлайн должен убывать через всю цепочку.', lead:'Ограничение времени ожидания, освобождающее ресурсы и фиксирующее бюджет задержки.', model:'Общий deadline делится между gateway, сервисами и БД; нижний слой не должен ждать дольше верхнего.', when:'Любой сетевой вызов, запрос к БД, очереди, файлы и внешние интеграции.', code:'client timeout: 2000 ms\ngateway budget: 1800 ms\ndb statement_timeout: 900 ms\n\n→ 504 Gateway Timeout', checks:['Timeout задан везде?','Отменяется ли нижняя работа?','Различаются connect/read timeout?'], mistake:'Таймаут клиента 2с, а внутренний вызов продолжает занимать соединение 30с.' },
+      { id:'status-codes', n:'12', title:'Status codes', subtitle:'Коды — инструкции для клиента', cat:'contract', accent:'#22d3ee', demo:'codes', takeaway:'2xx — успех; 4xx — клиент; 5xx — сервер.', lead:'Стандартный машинно-читаемый сигнал результата и дальнейшего поведения клиента.', model:'Код сообщает класс результата, заголовки дают инструкции, тело — безопасные детали.', when:'Во всех HTTP API без исключения.', code:'201 Created       # создано\n400 Bad Request   # не повторять\n429 Too Many...   # повторить позже\n503 Unavailable   # временный сбой', checks:['Код соответствует семантике?','Ошибки имеют единый формат?','Retryable статусы различимы?'], mistake:'Всегда возвращать 200 с {"error": ...}, уничтожая семантику HTTP-инфраструктуры.' }
+    ];
+
+    const categoryNames = {contract:'контракт', transport:'доставка', resilience:'устойчивость'};
+    const grid = document.querySelector('#grid');
+    const dialog = document.querySelector('#detailDialog');
+
+    function demo(type) {
+      if (type === 'route') return '<span class="label http-verb">GET /users/42</span><span class="track"></span><span class="node client">CLIENT</span><span class="packet"></span><span class="node server">API</span><span class="label response">200 · user.json</span>';
+      if (type === 'idempotency') return '<span class="label http-verb">same key × 2</span><span class="counter duplicate">orders: 1</span><span class="label response">original response reused</span>';
+      if (type === 'pagination') return '<span class="cursor">cursor →</span><div class="rows">'+Array(8).fill('<span class="row"></span>').join('')+'</div>';
+      if (type === 'rate') return '<span class="label limit-code">429</span><div class="bucket">'+Array(5).fill('<span class="token"></span>').join('')+'</div><span class="label response">Retry-After: 30</span>';
+      if (type === 'versions') return '<div class="versions"><span class="version">/v1</span><span class="version">/v2</span></div>';
+      if (type === 'webhook') return '<span class="node client">YOUR APP</span><span class="hook-arrow"></span><span class="node server">THEIR API</span><span class="label response">POST event → verify</span>';
+      if (type === 'grpc') return '<div class="frames">'+Array(16).fill('<span class="frame"></span>').join('')+'</div><span class="label response">HTTP/2 · binary · stream</span>';
+      if (type === 'graphql') return '<div class="query">user {<br>&nbsp;&nbsp;<b>name</b><br>&nbsp;&nbsp;<b>avatar</b><br>&nbsp;&nbsp;<b>plan</b><br>}</div><div class="result-fields"><span class="field"></span><span class="field"></span><span class="field"></span></div>';
+      if (type === 'auth') return '<span class="lock">🔐</span><span class="label http-verb">Bearer token</span><span class="scope">scope: orders:read → 200</span>';
+      if (type === 'retry') return '<div class="retry-bars"><span class="retry-bar"></span><span class="retry-bar"></span><span class="retry-bar"></span><span class="retry-bar"></span></div><span class="label response">1s · 2s · 4s · 8s + jitter</span>';
+      if (type === 'timeout') return '<span class="label http-verb">deadline: 2.0s</span><span class="deadline"></span><span class="label response">cancel downstream work</span>';
+      return '<div class="codes"><span class="code">2xx</span><span class="code">3xx</span><span class="code">4xx</span><span class="code">5xx</span></div>';
+    }
+
+    grid.innerHTML = concepts.map(c => `<button class="card" data-id="${c.id}" data-category="${c.cat}" style="--accent:${c.accent}" aria-label="Открыть: ${c.title}">
+      <div class="meta"><span>${c.n} · <span class="category-dot">${categoryNames[c.cat]}</span></span><span>↗</span></div>
+      <h2>${c.title}</h2><p class="card-subtitle">${c.subtitle}</p><div class="demo">${demo(c.demo)}</div><div class="takeaway">${c.takeaway}</div><span class="open-hint">открыть разбор</span>
+    </button>`).join('');
+
+    function openDetail(id) {
+      const c = concepts.find(item => item.id === id);
+      if (!c) return;
+      dialog.style.setProperty('--dialog-accent', c.accent);
+      document.querySelector('#dialogIndex').textContent = `${c.n} · ${categoryNames[c.cat]}`;
+      document.querySelector('#dialogTitle').textContent = c.title;
+      document.querySelector('#dialogLead').textContent = c.lead;
+      document.querySelector('#dialogModel').textContent = c.model;
+      document.querySelector('#dialogWhen').textContent = c.when;
+      document.querySelector('#dialogCode').textContent = c.code;
+      document.querySelector('#dialogChecks').innerHTML = c.checks.map(x => `<li>${x}</li>`).join('');
+      document.querySelector('#dialogMistake').textContent = c.mistake;
+      dialog.showModal();
+    }
+
+    grid.addEventListener('click', e => { const card = e.target.closest('.card'); if (card) openDetail(card.dataset.id); });
+    document.querySelector('.dialog-close').addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', e => { if (e.target === dialog) dialog.close(); });
+
+    let activeFilter = 'all';
+    let search = '';
+    function applyFilters() {
+      document.querySelectorAll('.card').forEach(card => {
+        const c = concepts.find(x => x.id === card.dataset.id);
+        const matchesFilter = activeFilter === 'all' || c.cat === activeFilter;
+        const haystack = `${c.title} ${c.subtitle} ${c.takeaway} ${categoryNames[c.cat]}`.toLowerCase();
+        card.classList.toggle('hidden', !matchesFilter || !haystack.includes(search));
+      });
+    }
+    document.querySelectorAll('.filter').forEach(button => button.addEventListener('click', () => {
+      document.querySelector('.filter.active').classList.remove('active'); button.classList.add('active'); activeFilter = button.dataset.filter; applyFilters();
+    }));
+    document.querySelector('.search').addEventListener('input', e => { search = e.target.value.trim().toLowerCase(); applyFilters(); });
+
+    const chain = document.querySelector('#failureChain');
+    const chainIds = ['timeouts','retries','idempotency','rate-limits','status-codes'];
+    function setChain(show) {
+      chain.classList.toggle('visible', show);
+      document.querySelectorAll('.card').forEach(card => { card.classList.toggle('lit', show && chainIds.includes(card.dataset.id)); card.classList.toggle('dimmed', show && !chainIds.includes(card.dataset.id)); });
+      document.querySelector('#chainButton').textContent = show ? '■ Скрыть цепочку сбоя' : '▶ Показать цепочку сбоя';
+      if (show) chain.scrollIntoView({behavior:'smooth', block:'nearest'});
+    }
+    document.querySelector('#chainButton').addEventListener('click', () => setChain(!chain.classList.contains('visible')));
+    document.querySelector('.close-chain').addEventListener('click', () => setChain(false));
+  </script>
+</body>
+</html>

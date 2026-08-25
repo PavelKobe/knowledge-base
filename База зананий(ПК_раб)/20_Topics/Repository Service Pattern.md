@@ -36,3 +36,5 @@ flowchart LR
 - [[SQLAlchemy 2 async]]
 - [[PostgreSQL]]
 - [[Pytest]]
+- [[Структура backend-проекта — layers и feature slices]]
+- [[15 паттернов проектирования]]

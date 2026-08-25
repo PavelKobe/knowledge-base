@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Claude за 7 дней</title>
+  <style>
+    :root{--ink:#18242b;--muted:#67747a;--paper:#f8f3e8;--panel:#fffdf7;--line:#c8bda9;--teal:#268f87;--blue:#4169c8;--violet:#7659a7;--green:#4c9664;--gold:#d18a2c;--orange:#d1643f;--red:#b84f57}
+    *{box-sizing:border-box}body{margin:0;background:#e9e4da;color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}.sheet{width:min(1180px,calc(100% - 28px));margin:14px auto;padding:28px;background:var(--paper);border:1px solid #d3cab9;box-shadow:0 12px 40px rgba(40,35,25,.12)}
+    .eyebrow{display:flex;justify-content:space-between;gap:12px;font:700 11px/1.3 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}.dot{color:var(--teal)}
+    h1{margin:26px 0 10px;text-align:center;font:900 clamp(42px,7vw,82px)/.92 Georgia,"Times New Roman",serif;letter-spacing:-.045em}.accent{color:var(--teal)}.lead{max-width:760px;margin:0 auto 26px;text-align:center;color:var(--muted);font-size:17px;line-height:1.55}
+    .stats{display:grid;grid-template-columns:1.25fr repeat(3,1fr);gap:10px;margin-bottom:14px}.stat{background:rgba(255,255,255,.65);border:1px solid var(--line);padding:15px}.label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}.value{margin-top:7px;font:800 28px/1 Georgia,serif}.progress{height:7px;margin-top:13px;background:#e4ded2;overflow:hidden}.progress>span{display:block;height:100%;width:0;background:var(--teal);transition:width .25s ease}
+    .timeline{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin:20px 0 16px}.day{appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:12px 8px;min-height:72px;cursor:pointer;text-align:left}.day:hover{border-color:var(--teal)}.day.active{background:var(--ink);color:white;border-color:var(--ink)}.day.done{box-shadow:inset 0 -5px var(--teal)}.day b{display:block;font:800 26px/1 Georgia,serif}.day span{display:block;margin-top:7px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;opacity:.75}
+    .workspace{display:grid;grid-template-columns:1.25fr .75fr;gap:16px}.tasks{display:grid;gap:10px}.task{display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:start;padding:16px;background:var(--panel);border:1px solid var(--line)}.task.complete{opacity:.64}.num{display:grid;place-items:center;width:42px;height:42px;border:2px solid var(--teal);border-radius:50%;font:800 20px/1 Georgia,serif;color:var(--teal)}.task h2{margin:0 0 5px;font:800 21px/1.1 Georgia,serif}.task p{margin:0;color:var(--muted);font-size:14px;line-height:1.45}.check{display:flex;align-items:center;gap:8px;font-size:12px;white-space:nowrap}.check input{width:20px;height:20px;accent-color:var(--teal);cursor:pointer}
+    .side{background:#e8f1ee;border:1px solid #a9c9c1;padding:20px;align-self:start;position:sticky;top:14px}.side h2{margin:4px 0 12px;font:800 26px/1.05 Georgia,serif}.side p{color:#405b58;line-height:1.55}.side ul{margin:14px 0 0;padding-left:20px;color:#405b58;line-height:1.65}.next{margin-top:18px;padding-top:16px;border-top:1px solid #a9c9c1}.next strong{display:block;margin-top:5px;font-size:18px}.reset{width:100%;margin-top:20px;padding:10px;border:1px solid #9d5656;background:transparent;color:#914848;cursor:pointer}.reset:hover{background:#fff3f1}
+    .map{margin-top:24px;padding-top:18px;border-top:2px solid var(--ink)}.map h2{margin:0 0 14px;font:800 24px/1 Georgia,serif}.map-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.mini{padding:12px;border-top:5px solid var(--c);background:rgba(255,255,255,.52);font-size:12px;line-height:1.45}.mini b{display:block;margin-bottom:5px;font-size:14px}.footer{display:flex;justify-content:space-between;gap:16px;margin-top:22px;padding-top:14px;border-top:1px solid var(--line);color:var(--muted);font-size:11px}
+    @media(max-width:850px){.stats{grid-template-columns:1fr 1fr}.timeline{grid-template-columns:repeat(4,1fr)}.workspace{grid-template-columns:1fr}.side{position:static}.map-grid{grid-template-columns:1fr 1fr}}
+    @media(max-width:520px){.sheet{width:100%;margin:0;padding:18px}.eyebrow{display:block}.eyebrow span:last-child{display:block;margin-top:7px}.stats{grid-template-columns:1fr}.timeline{grid-template-columns:1fr 1fr}.task{grid-template-columns:38px 1fr}.check{grid-column:2}.map-grid{grid-template-columns:1fr}.footer{display:block}.footer span{display:block;margin-top:5px}}
+  </style>
+</head>
+<body>
+<main class="sheet">
+  <div class="eyebrow"><span>Claude onboarding sprint</span><span><span class="dot">●</span> 7 дней · 10 действий</span></div>
+  <h1>CLAUDE ЗА <span class="accent">7 ДНЕЙ</span></h1>
+  <p class="lead">Короткий маршрут от первого входа до командного проекта и автоматизации. Выберите день, выполните действия и сохраните прогресс.</p>
+
+  <section class="stats" aria-label="Прогресс">
+    <div class="stat"><div class="label">Общий прогресс</div><div class="value" id="percent">0%</div><div class="progress" role="progressbar" aria-label="Общий прогресс" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="bar"></span></div></div>
+    <div class="stat"><div class="label">Выполнено</div><div class="value" id="count">0/10</div></div>
+    <div class="stat"><div class="label">Дни закрыты</div><div class="value" id="daysDone">0/7</div></div>
+    <div class="stat"><div class="label">Следующий день</div><div class="value" id="nextDay">01</div></div>
+  </section>
+
+  <nav class="timeline" aria-label="Дни интенсива" id="timeline"></nav>
+
+  <section class="workspace">
+    <div class="tasks" id="tasks" aria-live="polite"></div>
+    <aside class="side">
+      <div class="label">Фокус дня <span id="focusNumber">01</span></div>
+      <h2 id="focusTitle">Старт</h2>
+      <p id="focusText"></p>
+      <ul id="focusChecks"></ul>
+      <div class="next"><div class="label">Следующее действие</div><strong id="nextAction">Установить Claude</strong></div>
+      <button class="reset" id="reset" type="button">Сбросить прогресс</button>
+    </aside>
+  </section>
+
+  <section class="map">
+    <h2>Карта рабочего контекста</h2>
+    <div class="map-grid">
+      <div class="mini" style="--c:var(--teal)"><b>Обо мне</b>Роль, стиль, цели и правила.</div>
+      <div class="mini" style="--c:var(--blue)"><b>Проекты</b>Контекст отдельных задач.</div>
+      <div class="mini" style="--c:var(--violet)"><b>Шаблоны</b>Повторяемые структуры.</div>
+      <div class="mini" style="--c:var(--gold)"><b>Выходы Claude</b>Готовые результаты.</div>
+      <div class="mini" style="--c:var(--orange)"><b>Автоматизации</b>Расписание и контроль.</div>
+    </div>
+  </section>
+
+  <footer class="footer"><span>Интерактивный учебный трекер · База знаний · 2026</span><span>Доступность функций и тарифы сверяйте с текущей версией Claude.</span></footer>
+</main>
+
+<script>
+const days=[
+  {title:'Старт',text:'Подготовьте среду и поймите, какой режим подходит под разные типы задач.',checks:['Приложение или веб-версия доступны','Проверен вход и синхронизация','Режим выбран осознанно'],tasks:[
+    {n:1,title:'Установить и проверить доступ',desc:'Откройте Claude на основном устройстве, войдите в аккаунт и проведите короткую проверку.'},
+    {n:2,title:'Разобраться в режимах',desc:'Разделите быстрый чат, Projects, совместную работу и Claude Code по назначению.'}]},
+  {title:'Контекст',text:'Соберите минимальную систему файлов, чтобы не пересказывать Claude всё с нуля.',checks:['Созданы четыре смысловые папки','Заполнен about-me.md','Создан anti-ai-style.md'],tasks:[
+    {n:3,title:'Создать четыре папки',desc:'Обо мне, Проекты, Шаблоны и Выходы Claude — простая карта рабочего контекста.'},
+    {n:4,title:'Написать два ключевых файла',desc:'about-me.md задаёт контекст, anti-ai-style.md фиксирует нежелательные клише и стиль.'}]},
+  {title:'Диалог',text:'Переведите работу из разовых промптов в короткий управляемый разговор.',checks:['Есть стартовый шаблон','Claude задаёт вопросы первым','План утверждается до выполнения'],tasks:[
+    {n:5,title:'Сохранить стартовый шаблон',desc:'Подключайте роль, цель, материалы, ограничения, формат и критерии проверки.'},
+    {n:6,title:'Пусть Claude проведёт интервью',desc:'Сначала уточнения и варианты, затем согласованный план и только после него выполнение.'}]},
+  {title:'Расширение',text:'Добавьте один готовый инструмент под реальную повторяемую задачу.',checks:['Выбран конкретный сценарий','Подключён один инструмент','Проверен результат на тестовой задаче'],tasks:[
+    {n:7,title:'Подключить один плагин',desc:'Начните с одной потребности: маркетинг, данные, документы, исследование или код.'}]},
+  {title:'Связи',text:'Дайте Claude доступ только к тем источникам, которые действительно нужны в работе.',checks:['Определены нужные источники','Проверены права доступа','Есть тестовый запрос к данным'],tasks:[
+    {n:8,title:'Подключить рабочие сервисы',desc:'Используйте коннекторы для документов, почты, Slack, Notion и других систем.'}]},
+  {title:'Команда',text:'Создайте одно общее пространство и договоритесь о правилах совместной работы.',checks:['Проект создан','Участники приглашены','Роли и доступ разделены'],tasks:[
+    {n:9,title:'Создать командный Project',desc:'Соберите общий контекст, пригласите коллег и зафиксируйте границы доступа.'}]},
+  {title:'Автоматизация',text:'Закрепите один повторяемый процесс: вход, расписание, результат и проверка.',checks:['Есть полный бриф','Назначено расписание','Определено место результата и контроль'],tasks:[
+    {n:10,title:'Запланировать первую автоматизацию',desc:'Автоматизируйте одну безопасную задачу с понятным расписанием и проверяемым выходом.'}]}
+];
+const key='kb-claude-7-day-v1';let state={selected:0,done:[]};try{state={...state,...JSON.parse(localStorage.getItem(key)||'{}')}}catch(e){}
+const timeline=document.querySelector('#timeline'),tasks=document.querySelector('#tasks');
+function save(){localStorage.setItem(key,JSON.stringify(state))}
+function render(){
+  timeline.innerHTML=days.map((d,i)=>{const complete=d.tasks.every(t=>state.done.includes(t.n));return `<button type="button" class="day ${state.selected===i?'active':''} ${complete?'done':''}" data-day="${i}" aria-pressed="${state.selected===i}"><b>${String(i+1).padStart(2,'0')}</b><span>${d.title}</span></button>`}).join('');
+  const d=days[state.selected];document.querySelector('#focusNumber').textContent=String(state.selected+1).padStart(2,'0');document.querySelector('#focusTitle').textContent=d.title;document.querySelector('#focusText').textContent=d.text;document.querySelector('#focusChecks').innerHTML=d.checks.map(x=>`<li>${x}</li>`).join('');
+  tasks.innerHTML=d.tasks.map(t=>{const done=state.done.includes(t.n);return `<article class="task ${done?'complete':''}"><div class="num">${t.n}</div><div><h2>${t.title}</h2><p>${t.desc}</p></div><label class="check"><input type="checkbox" data-task="${t.n}" ${done?'checked':''}> Готово</label></article>`}).join('');
+  const count=state.done.length,pct=Math.round(count/10*100),closed=days.filter(x=>x.tasks.every(t=>state.done.includes(t.n))).length,next=days.findIndex(x=>!x.tasks.every(t=>state.done.includes(t.n))),nextTask=days.flatMap(x=>x.tasks).find(t=>!state.done.includes(t.n));
+  document.querySelector('#percent').textContent=pct+'%';document.querySelector('#count').textContent=count+'/10';document.querySelector('#daysDone').textContent=closed+'/7';document.querySelector('#nextDay').textContent=next<0?'✓':String(next+1).padStart(2,'0');document.querySelector('#nextAction').textContent=nextTask?nextTask.title:'Интенсив завершён';document.querySelector('#bar').style.width=pct+'%';document.querySelector('.progress').setAttribute('aria-valuenow',pct);
+  timeline.querySelectorAll('[data-day]').forEach(b=>b.addEventListener('click',()=>{state.selected=Number(b.dataset.day);save();render()}));
+  tasks.querySelectorAll('[data-task]').forEach(c=>c.addEventListener('change',()=>{const n=Number(c.dataset.task);state.done=c.checked?[...new Set([...state.done,n])]:state.done.filter(x=>x!==n);save();render()}));
+}
+document.querySelector('#reset').addEventListener('click',()=>{if(confirm('Сбросить весь прогресс интенсива?')){state={selected:0,done:[]};save();render()}});render();
+</script>
+</body>
+</html>

@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "baedbb6f5a460b86",
+        "id": "a04963e9c53464a9",
         "type": "tabs",
         "children": [
           {
-            "id": "79c41968b38496c3",
+            "id": "ce60649c146447b5",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "90_Templates/Универсальный чек-лист среды проекта с AI-агентом.md",
+                "file": "Главная.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Универсальный чек-лист среды проекта с AI-агентом"
+              "title": "Главная"
             }
           }
         ]
@@ -41,7 +41,9 @@
               "type": "file-explorer",
               "state": {
                 "sortOrder": "alphabetical",
-                "autoReveal": false
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
               },
               "icon": "lucide-folder-closed",
               "title": "Файловый менеджер"
@@ -183,41 +185,44 @@
       "bases:Создать новую базу": false
     }
   },
-  "active": "79c41968b38496c3",
+  "active": "ce60649c146447b5",
   "lastOpenFiles": [
+    "20_Topics/claude-use-cases-dashboard/index.html",
+    "20_Topics/claude-use-cases-dashboard",
+    "20_Topics/12 сценариев Claude.md",
+    "50_Learning/Claude/claude-7-day-dashboard/index.html",
+    "50_Learning/Claude/claude-7-day-dashboard",
+    "50_Learning/Claude/Claude — интенсив на 7 дней.md",
+    "50_Learning/Claude/claude-roadmap-dashboard/index.html",
+    "50_Learning/Claude/claude-roadmap-dashboard",
+    "50_Learning/Claude/Claude — дорожная карта освоения.md",
+    "50_Learning/Claude",
+    "20_Topics/api-testing-dashboard/index.html",
+    "20_Topics/api-testing-dashboard",
+    "20_Topics/9 видов тестирования API.md",
+    "20_Topics/graph-engineering-dashboard/index.html",
+    "20_Topics/graph-engineering-dashboard",
+    "20_Topics/Graph Engineering для AI-агентов.md",
+    "20_Topics/AI-инструменты без VPN — карта на 2026-08-12.md",
+    "20_Topics/6 архитектурных паттернов — выбор и компромиссы.md",
+    "90_Templates/AI-агент — шаблон проектирования, запуска и масштабирования.md",
+    "20_Topics/Claude Code — структура AI-assisted проекта.md",
+    "20_Topics/Claude — карта возможностей.md",
     "Главная.md",
+    "90_Templates/Harness Engineering — универсальный чек-лист разработки приложений.md",
+    "20_Topics/12 архитектурных концепций.md",
+    "20_Topics/AI -системы.md",
+    "50_Learning/InterviewLab/03 Журнал сессий.md",
     "20_Topics/REST API.md",
+    "90_Templates/Универсальный чек-лист среды проекта с AI-агентом.md",
     "10_Projects/retail-audit-kit - корпоративный аудит розницы.md",
     "10_Projects/Antygraviti MVP - архитектура.md",
     "20_Topics/JWT.md",
     "20_Topics/PostgreSQL.md",
     "20_Topics/FastAPI.md",
-    "90_Templates/Универсальный чек-лист среды проекта с AI-агентом.md",
     "90_Templates/test_unicode_tmp.md",
-    "Без названия 1",
-    "Без названия",
     "30_Snippets/Деплой retail-audit-kit на Windows Server.md",
     "Без названия.canvas",
-    "90_Templates/Шаблон заметки по модулю backend.md",
-    "20_Topics/Корпоративное хранилище фото.md",
-    "20_Topics/Session Cookie Auth.md",
-    "20_Topics/Telegram Bot.md",
-    "20_Topics/OpenRouter.md",
-    "20_Topics/Yandex Object Storage.md",
-    "20_Topics/Yandex SpeechKit.md",
-    "20_Topics/Voximplant.md",
-    "20_Topics/AI Voice Screening.md",
-    "30_Snippets/Деплой VoiceScreen и инфраструктура.md",
-    "30_Snippets/Команды VoiceScreen.md",
-    "10_Projects/VoiceScreen - данные и API.md",
-    "10_Projects/VoiceScreen - архитектура.md",
-    "10_Projects/VoiceScreen - голосовой AI-скрининг.md",
-    "20_Topics/Nginx Prometheus.md",
-    "20_Topics/Alembic.md",
-    "90_Templates",
-    "40_Daily",
-    "30_Snippets",
-    "20_Topics",
-    "10_Projects"
+    "90_Templates/Шаблон заметки по модулю backend.md"
   ]
 }
