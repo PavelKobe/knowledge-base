@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>8 RAG Architectures — AI Engineering Field Guide</title>
+  <style>
+    :root {
+      --bg: #07111f;
+      --panel: #0e1b2d;
+      --panel-2: #13243a;
+      --text: #eef6ff;
+      --muted: #9eb2c8;
+      --line: #27415f;
+      --accent: #64d8ff;
+      --accent-2: #a78bfa;
+      --good: #52e0a5;
+      --warn: #ffd166;
+      --shadow: 0 14px 40px rgba(0,0,0,.28);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 20% 0%, rgba(100,216,255,.12), transparent 30%),
+        radial-gradient(circle at 80% 10%, rgba(167,139,250,.12), transparent 26%),
+        var(--bg);
+      min-height: 100vh;
+    }
+
+    .wrap { width: min(1180px, calc(100% - 32px)); margin: 0 auto; }
+
+    header {
+      padding: 56px 0 28px;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      padding: 7px 11px;
+      border: 1px solid rgba(100,216,255,.28);
+      background: rgba(100,216,255,.08);
+      color: var(--accent);
+      border-radius: 999px;
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 18px 0 12px;
+      max-width: 900px;
+      font-size: clamp(38px, 6vw, 72px);
+      line-height: .98;
+      letter-spacing: -.04em;
+    }
+
+    .lead {
+      max-width: 850px;
+      color: var(--muted);
+      font-size: clamp(16px, 2vw, 20px);
+      line-height: 1.6;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    button {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 10px 14px;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    button:hover, button.active {
+      border-color: var(--accent);
+      background: rgba(100,216,255,.12);
+      transform: translateY(-1px);
+    }
+
+    main { padding: 34px 0 70px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(19,36,58,.95), rgba(10,24,41,.95));
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: var(--shadow);
+      transition: .2s ease;
+    }
+
+    .card:hover { transform: translateY(-3px); border-color: rgba(100,216,255,.3); }
+    .card.hidden { display: none; }
+
+    .num {
+      position: absolute;
+      right: 16px;
+      top: 8px;
+      font-weight: 800;
+      font-size: 70px;
+      color: rgba(255,255,255,.035);
+      user-select: none;
+    }
+
+    .topline { display: flex; align-items: center; gap: 10px; }
+    .icon {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: rgba(100,216,255,.1);
+      border: 1px solid rgba(100,216,255,.2);
+      font-size: 20px;
+    }
+
+    h2 { margin: 0; font-size: 24px; letter-spacing: -.02em; }
+    .tag {
+      display: inline-block;
+      margin-top: 10px;
+      color: var(--good);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .desc { color: var(--muted); line-height: 1.55; margin: 12px 0 16px; }
+
+    .flow {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 7px;
+      padding: 14px;
+      border-radius: 14px;
+      background: rgba(0,0,0,.18);
+      border: 1px solid rgba(255,255,255,.06);
+      min-height: 76px;
+    }
+
+    .node {
+      padding: 7px 9px;
+      border-radius: 9px;
+      border: 1px solid var(--line);
+      background: #0a1626;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .node.hot { border-color: rgba(167,139,250,.55); color: #d9ccff; }
+    .node.good { border-color: rgba(82,224,165,.45); color: #abf3d4; }
+    .arrow { color: #6f8aa5; font-size: 14px; }
+
+    details {
+      margin-top: 14px;
+      border-top: 1px solid rgba(255,255,255,.07);
+      padding-top: 12px;
+    }
+
+    summary { cursor: pointer; color: #c9dbef; font-weight: 650; }
+    details ul { color: var(--muted); line-height: 1.55; padding-left: 20px; }
+
+    .compare {
+      margin-top: 34px;
+      background: rgba(14,27,45,.82);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .compare h3 { margin: 0; padding: 20px; font-size: 22px; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 780px; }
+    th, td { padding: 13px 16px; border-top: 1px solid rgba(255,255,255,.07); text-align: left; }
+    th { color: #cfe9ff; font-size: 13px; background: rgba(255,255,255,.025); }
+    td { color: var(--muted); font-size: 14px; vertical-align: top; }
+    td strong { color: var(--text); }
+
+    .decision {
+      margin-top: 34px;
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 18px;
+    }
+
+    .panel {
+      background: rgba(14,27,45,.82);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius);
+      padding: 22px;
+    }
+
+    .panel h3 { margin-top: 0; }
+    .steps { display: grid; gap: 10px; }
+    .step { padding: 12px 14px; border-left: 3px solid var(--accent); background: rgba(255,255,255,.025); border-radius: 0 10px 10px 0; }
+    .step b { color: var(--text); }
+    .step span { color: var(--muted); }
+
+    footer { padding: 28px 0 50px; color: #7890a8; font-size: 13px; }
+
+    @media (max-width: 820px) {
+      .grid, .decision { grid-template-columns: 1fr; }
+      header { padding-top: 38px; }
+      .wrap { width: min(100% - 20px, 1180px); }
+    }
+
+    @media print {
+      body { background: white; color: #111; }
+      .toolbar { display: none; }
+      .grid { grid-template-columns: 1fr 1fr; }
+      .card, .panel, .compare { box-shadow: none; break-inside: avoid; background: white; border: 1px solid #ddd; }
+      .desc, td, .step span, details ul, .lead { color: #444; }
+      .node { background: white; color: #222; border-color: #bbb; }
+      h1, h2, h3, td strong, .step b { color: #111; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="eyebrow">AI Engineering Field Guide · RAG</div>
+      <h1>8 архитектур RAG</h1>
+      <p class="lead">Не «уровни зрелости», а разные паттерны retrieval. Выбирайте архитектуру по типу запроса, данным, качеству поиска и необходимой степени автономности.</p>
+      <div class="toolbar" aria-label="Фильтры">
+        <button class="active" data-filter="all">Все</button>
+        <button data-filter="basic">Базовые</button>
+        <button data-filter="quality">Качество retrieval</button>
+        <button data-filter="relations">Связи</button>
+        <button data-filter="routing">Routing / Agents</button>
+        <button onclick="window.print()">Печать / PDF</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="grid" id="cards">
+
+      <article class="card" data-group="basic">
+        <div class="num">01</div>
+        <div class="topline"><div class="icon">🔎</div><h2>Naive RAG</h2></div>
+        <span class="tag">Для простых fact-based запросов</span>
+        <p class="desc">Базовый pipeline: вопрос превращается в embedding, из vector DB выбираются релевантные чанки, затем они подаются модели как контекст.</p>
+        <div class="flow">
+          <span class="node">Query</span><span class="arrow">→</span><span class="node">Embedding</span><span class="arrow">→</span><span class="node hot">Vector DB</span><span class="arrow">→</span><span class="node">Context</span><span class="arrow">→</span><span class="node good">LLM</span>
+        </div>
+        <details><summary>Когда выбирать</summary><ul><li>FAQ и внутренние базы знаний.</li><li>Документы хорошо совпадают с пользовательскими формулировками.</li><li>Нужен быстрый MVP с минимальной сложностью.</li></ul></details>
+      </article>
+
+      <article class="card" data-group="basic">
+        <div class="num">02</div>
+        <div class="topline"><div class="icon">🖼️</div><h2>Multimodal RAG</h2></div>
+        <span class="tag">Текст + изображения + аудио + таблицы</span>
+        <p class="desc">Retrieval работает сразу по нескольким типам данных. Полезно там, где смысл находится не только в тексте: схемах, фото, сканах, графиках и аудио.</p>
+        <div class="flow">
+          <span class="node">Query</span><span class="arrow">→</span><span class="node">Multi-encoder</span><span class="arrow">→</span><span class="node hot">Multi-index</span><span class="arrow">→</span><span class="node">Text / Image / Audio</span><span class="arrow">→</span><span class="node good">LLM/VLM</span>
+        </div>
+        <details><summary>Когда выбирать</summary><ul><li>Инструкции со схемами и фотографиями.</li><li>Каталоги товаров.</li><li>Техническая документация с таблицами и диаграммами.</li></ul></details>
+      </article>
+
+      <article class="card" data-group="quality">
+        <div class="num">03</div>
+        <div class="topline"><div class="icon">🧠</div><h2>HyDE</h2></div>
+        <span class="tag">Когда вопрос и документы «говорят разными словами»</span>
+        <p class="desc">Модель сначала генерирует гипотетический документ/ответ, затем embedding строится уже от него — это помогает найти реальные документы, семантически близкие к предполагаемому ответу.</p>
+        <div class="flow">
+          <span class="node">Query</span><span class="arrow">→</span><span class="node good">Hypothetical answer</span><span class="arrow">→</span><span class="node">Embedding</span><span class="arrow">→</span><span class="node hot">Vector DB</span><span class="arrow">→</span><span class="node good">LLM</span>
+        </div>
+        <details><summary>Когда выбирать</summary><ul><li>Пользователи сильно перефразируют терминологию документов.</li><li>Короткий запрос плохо совпадает с длинными документами.</li><li>Semantic retrieval даёт низкий recall.</li></ul></details>
+      </article>
+
+      <article class="card" data-group="quality">
+        <div class="num">04</div>
+        <div class="topline"><div class="icon">✅</div><h2>Corrective RAG</h2></div>
+        <span class="tag">Когда retrieval нужно проверять</span>
+        <p class="desc">Полученные чанки оцениваются перед генерацией. Если контекст слабый, система переформулирует запрос, расширяет поиск или подключает другой источник.</p>
+        <div class="flow">
+          <span class="node">Query</span><span class="arrow">→</span><span class="node hot">Retrieve</span><span class="arrow">→</span><span class="node">Grade</span><span class="arrow">→</span><span class="node">Rewrite / Web</span><span class="arrow">→</span><span class="node good">LLM</span>
+        </div>
+        <details><summary>Когда выбирать</summary><ul><li>Верхние top-k чанки часто выглядят релевантными, но не отвечают на вопрос.</li><li>Нужна проверка свежести или фактической опоры.</li><li>Есть несколько источников разного качества.</li></ul></details>
+      </article>
+
+      <article class="card" data-group="relations">
+        <div class="num">05</div>
+        <div class="topline"><div class="icon">🕸️</div><h2>Graph RAG</h2></div>
+        <span class="tag">Когда ответ — это отношение между сущностями</span>
+        <p class="desc">Документы преобразуются в сущности и связи. Retrieval идёт через knowledge graph, что помогает отвечать на вопросы о зависимостях, цепочках и структуре.</p>
+        <div class="flow">
+          <span class="node">Docs</span><span class="arrow">→</span><span class="node">Entities</span><span class="arrow">→</span><span class="node hot">Graph DB</span><span class="arrow">→</span><span class="node">Subgraph</span><span class="arrow">→</span><span class="node good">LLM</span>
+        </div>
+        <details><summary>Когда выбирать</summary><ul><li>Оргструктуры, зависимости систем, связи клиентов и транзакций.</li><li>Вопросы «как A связано с B?».</li><li>Нужен multi-hop reasoning по отношениям.</li></ul></details>
+      </article>
+
+      <article class="card" data-group="relations quality">
+        <div class="num">06</div>
+        <div class="topline"><div class="icon">⚡</div><h2>Hybrid RAG</h2></div>
+        <span class="tag">Когда важны и смысл, и точные совпадения</span>
+        <p class="desc">Объединяет несколько retrieval-каналов: dense vector search, sparse/BM25, metadata filters и при необходимости graph retrieval. Результаты затем сливаются и rerank'ятся.</p>
+        <div class="flow">
+          <span class="node">Query</span><span class="arrow">→</span><span class="node hot">Dense</span><span class="node hot">BM25</span><span class="node hot">Graph</span><span class="arrow">→</span><span class="node">Fusion + Rerank</span><span class="arrow">→</span><span class="node good">LLM</span>
+        </div>
+        <details><summary>Когда выбирать</summary><ul><li>Артикулы, номера договоров, имена и точные термины важны так же, как семантика.</li><li>Один vector search теряет точные совпадения.</li><li>Нужно повысить recall без перехода к агентной системе.</li></ul></details>
+      </article>
+
+      <article class="card" data-group="routing">
+        <div class="num">07</div>
+        <div class="topline"><div class="icon">🧭</div><h2>Adaptive RAG</h2></div>
+        <span class="tag">Разные запросы → разные pipelines</span>
+        <p class="desc">Router оценивает вопрос и выбирает стратегию: ответ без retrieval, простой поиск, декомпозицию, multi-hop или специализированный retriever.</p>
+        <div class="flow">
+          <span class="node">Query</span><span class="arrow">→</span><span class="node hot">Router</span><span class="arrow">→</span><span class="node">Direct</span><span class="node">Simple RAG</span><span class="node">Multi-step</span><span class="arrow">→</span><span class="node good">LLM</span>
+        </div>
+        <details><summary>Когда выбирать</summary><ul><li>Есть простые и сложные запросы в одном продукте.</li><li>Часть вопросов не требует поиска вообще.</li><li>Нужно контролировать стоимость и latency.</li></ul></details>
+      </article>
+
+      <article class="card" data-group="routing">
+        <div class="num">08</div>
+        <div class="topline"><div class="icon">🤖</div><h2>Agentic RAG</h2></div>
+        <span class="tag">Когда путь к ответу заранее неизвестен</span>
+        <p class="desc">Агент планирует действия, решает какой инструмент вызвать, проводит несколько циклов retrieval, проверяет промежуточные результаты и завершает задачу по условию.</p>
+        <div class="flow">
+          <span class="node">Goal</span><span class="arrow">→</span><span class="node hot">Agent / Planner</span><span class="arrow">↔</span><span class="node">Search</span><span class="node">DB</span><span class="node">API</span><span class="node">Files</span><span class="arrow">→</span><span class="node good">Answer</span>
+        </div>
+        <details><summary>Когда выбирать</summary><ul><li>Задачи требуют нескольких источников и инструментов.</li><li>Нужно уточнять стратегию по ходу поиска.</li><li>Есть сложные workflow: исследование, расследование, аналитика, действия через API.</li></ul></details>
+      </article>
+    </section>
+
+    <section class="compare">
+      <h3>Быстрое сравнение</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Архитектура</th><th>Главная проблема</th><th>Сложность</th><th>Типичный следующий шаг</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Naive</strong></td><td>Простой semantic search</td><td>Низкая</td><td>Добавить reranker / hybrid</td></tr>
+            <tr><td><strong>Multimodal</strong></td><td>Знания не только в тексте</td><td>Средняя</td><td>Multi-vector / VLM</td></tr>
+            <tr><td><strong>HyDE</strong></td><td>Query-document mismatch</td><td>Средняя</td><td>Оценить recall</td></tr>
+            <tr><td><strong>Corrective</strong></td><td>Слабый или неверный retrieval</td><td>Средняя</td><td>Grader + fallback sources</td></tr>
+            <tr><td><strong>Graph</strong></td><td>Связи и multi-hop</td><td>Высокая</td><td>Entity extraction + graph DB</td></tr>
+            <tr><td><strong>Hybrid</strong></td><td>Semantic + exact match</td><td>Средняя</td><td>Fusion + reranking</td></tr>
+            <tr><td><strong>Adaptive</strong></td><td>Разная сложность запросов</td><td>Высокая</td><td>Router + policies</td></tr>
+            <tr><td><strong>Agentic</strong></td><td>Неизвестный путь решения</td><td>Очень высокая</td><td>Tools + planning + evals</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="decision">
+      <div class="panel">
+        <h3>Практическая стратегия внедрения</h3>
+        <div class="steps">
+          <div class="step"><b>1. Начните с Naive RAG.</b> <span>Соберите end-to-end pipeline и набор эталонных вопросов.</span></div>
+          <div class="step"><b>2. Измеряйте retrieval отдельно.</b> <span>Recall@K, MRR/nDCG, качество chunking и metadata filters.</span></div>
+          <div class="step"><b>3. Добавьте Hybrid + reranker.</b> <span>Это часто даёт больший прирост, чем смена LLM.</span></div>
+          <div class="step"><b>4. Усложняйте только по сигналу.</b> <span>Graph, Adaptive и Agentic RAG нужны под конкретный тип ошибки или workflow.</span></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Production checklist</h3>
+        <div class="steps">
+          <div class="step"><b>Data:</b> <span>versioning, ACL, metadata, deduplication.</span></div>
+          <div class="step"><b>Retrieval:</b> <span>hybrid, rerank, filters, query rewriting.</span></div>
+          <div class="step"><b>Safety:</b> <span>prompt-injection defense, source trust, permissions.</span></div>
+          <div class="step"><b>Observability:</b> <span>traces, latency, token cost, retrieved chunks, feedback.</span></div>
+          <div class="step"><b>Evals:</b> <span>groundedness, faithfulness, correctness + retrieval metrics.</span></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">Собственный учебный HTML-шаблон по мотивам инфографики об архитектурах RAG. Можно использовать локально без зависимостей и внешних библиотек.</div>
+  </footer>
+
+  <script>
+    const buttons = document.querySelectorAll('[data-filter]');
+    const cards = document.querySelectorAll('.card');
+
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        const filter = button.dataset.filter;
+        buttons.forEach(b => b.classList.remove('active'));
+        button.classList.add('active');
+
+        cards.forEach(card => {
+          const groups = card.dataset.group.split(' ');
+          const visible = filter === 'all' || groups.includes(filter);
+          card.classList.toggle('hidden', !visible);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
